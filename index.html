@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE SECRET: IDEA — Intelligence Terminal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;600;800&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #e2e8f0; }
+    .mono { font-family: 'Fira Code', monospace; }
+    .gold-glow { box-shadow: 0 0 25px rgba(234, 179, 8, 0.25); border-color: rgba(234, 179, 8, 0.6); }
+    .agent-card-bg { background: linear-gradient(135deg, rgba(30,41,59,0.8) 0%, rgba(15,23,42,0.9) 100%); }
+    .vip-badge-gradient { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+
+  <!-- TOP HEADER BANNER -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xl">
+          <i class="fa-solid fa-user-secret"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-wider text-slate-100 mono">THE SECRET: IDEA</h1>
+            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-xs px-2 py-0.5 rounded font-mono">thesecretidea.app</span>
+          </div>
+          <p class="text-xs text-slate-400">Founded & Created by <span class="text-amber-400 font-semibold">Charos Ismoilova</span></p>
+        </div>
+      </div>
+
+      <!-- ROLE TOGGLE SWITCHER -->
+      <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+        <span class="text-slate-400 px-3 font-mono">PERSPECTIVE:</span>
+        <button id="btn-view-admin" onclick="switchView('admin')" class="px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950">
+          <i class="fa-solid fa-crown mr-1"></i> HQ Director
+        </button>
+        <button id="btn-view-student" onclick="switchView('student')" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white">
+          <i class="fa-solid fa-user-shield mr-1"></i> Student View
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: STUDENT ACCOUNT SELECTOR & QUICK STATS (4 COLS) -->
+    <div class="lg:col-span-4 space-y-6">
+      
+      <!-- CURRENT USER ACCOUNT SWITCHER CARD -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mono flex justify-between items-center">
+          <span>Active Session</span>
+          <i class="fa-solid fa-id-card text-amber-400"></i>
+        </h2>
+        
+        <label class="block text-xs text-slate-400 mb-1">Select Student Account:</label>
+        <select id="student-selector" onchange="onStudentSelect(this.value)" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-amber-500 outline-none">
+          <!-- Dynamically populated -->
+        </select>
+
+        <!-- ACTIVE ACCOUNT BADGE PREVIEW -->
+        <div id="account-status-card" class="mt-4 p-4 rounded-xl border transition-all agent-card-bg border-slate-800">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- DIRECTOR ACTION CONTROL (ADMIN VIEW ONLY) -->
+      <div id="admin-controls-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest mono flex items-center gap-2">
+          <i class="fa-solid fa-sliders"></i> Director Controls
+        </h3>
+        
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-3">
+          <p class="text-xs text-slate-400">Modify selected operative's status for the current weekly cycle:</p>
+          <div class="flex gap-2">
+            <button onclick="toggleVIPStatus()" id="toggle-vip-btn" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition border border-amber-500/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30">
+              Toggle VIP Status
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Award Merit Points:</label>
+          <div class="flex gap-2">
+            <input type="number" id="point-add-input" value="10" class="w-20 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-center font-mono">
+            <button onclick="addPoints()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 rounded-lg transition border border-slate-700">
+              + Add Points
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLASSIFIED DISPATCH ENVELOPE PREVIEW -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mono flex items-center justify-between">
+          <span>Dispatch Envelope</span>
+          <i class="fa-solid fa-envelope-open-text text-amber-400"></i>
+        </h3>
+        <p class="text-xs text-slate-400 mb-3">Generated invitation letter for handing out discreetly on Monday morning:</p>
+        <div id="letter-preview" class="p-4 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-300 space-y-2 leading-relaxed">
+          <!-- Generated dynamically -->
+        </div>
+        <button onclick="copyLetter()" class="mt-3 w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-300 transition">
+          <i class="fa-regular fa-copy mr-1"></i> Copy Confidential Letter
+        </button>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: MAIN DASHBOARD & MISSIONS (8 COLS) -->
+    <div class="lg:col-span-8 space-y-6">
+
+      <!-- VIP HERO BANNER (VISIBLE WHEN VIP ACTIVE) -->
+      <div id="vip-hero-banner" class="hidden bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-500/40 rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-6 -bottom-6 text-amber-500/10 text-9xl">
+          <i class="fa-solid fa-user-secret"></i>
+        </div>
+        <div class="relative z-10 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold vip-badge-gradient text-slate-950 uppercase tracking-wider">
+              ⭐ VIP Operative Selected
+            </span>
+            <span class="text-xs text-amber-400 font-mono">Week 1 Cohort</span>
+          </div>
+          <h2 class="text-2xl font-black tracking-tight text-white" id="vip-hero-name">Agent Name</h2>
+          <p class="text-xs text-slate-300 max-w-xl">
+            You have been chosen for this week's secret mission cycle. Report to Headquarters room during lunch break. Maintain complete discretion.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-4 text-xs font-mono">
+            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block text-[10px]">NEXT HQ BRIEFING</span>
+              <span class="text-amber-400 font-bold" id="next-meeting-time">Monday @ 13:15</span>
+            </div>
+            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block text-[10px]">SECRET HQ LOCATION</span>
+              <span class="text-amber-400 font-bold">Room 204 (Project Lab)</span>
+            </div>
+            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
+              <span class="text-slate-400 block text-[10px]">CLASSIFIED SCORE</span>
+              <span class="text-amber-400 font-bold" id="vip-hero-points">100 PTS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NON-VIP LOCKED SCREEN (VISIBLE FOR STANDARD STUDENTS) -->
+      <div id="standard-hero-banner" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center space-y-4">
+        <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-500 text-2xl">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-200">Standard Access Terminal</h2>
+        <p class="text-xs text-slate-400 max-w-md mx-auto">
+          You are currently in standard mode. Selected VIP Operatives receive private invitation letters on Monday mornings. Decrypt cipher to test your skills:
+        </p>
+        
+        <!-- CIPHER MINI GAME -->
+        <div class="max-w-md mx-auto p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+          <p class="text-xs font-mono text-amber-400">DECIPHER: "WKH VHFUHW LGHD"</p>
+          <div class="flex gap-2">
+            <input type="text" id="cipher-input" placeholder="Enter decrypted phrase..." class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 font-mono outline-none focus:border-amber-500">
+            <button onclick="checkCipher()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-3 py-1.5 rounded-lg transition">
+              Decrypt
+            </button>
+          </div>
+          <p id="cipher-result" class="text-[11px] font-mono h-4"></p>
+        </div>
+      </div>
+
+      <!-- WEEKLY MISSIONS TRACKER -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mono flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-amber-400"></i> Weekly Mission Agenda
+          </h3>
+          <span class="text-xs font-mono text-slate-400">Week 1 Active Cycle</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="missions-container">
+          <!-- Dynamically Generated -->
+        </div>
+      </div>
+
+      <!-- ALL STUDENTS ROSTER TABLE -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mono flex items-center gap-2">
+            <i class="fa-solid fa-users text-amber-400"></i> Classified Student Database
+          </h3>
+          <span class="text-xs font-mono text-slate-400" id="total-students-count">5 Operatives Enrolled</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[10px]">
+              <tr>
+                <th class="p-3">Student Name</th>
+                <th class="p-3">Grade</th>
+                <th class="p-3">Status</th>
+                <th class="p-3 text-right">Points</th>
+                <th class="p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="roster-table-body" class="divide-y divide-slate-800/60">
+              <!-- Dynamically Populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-4 px-6 text-center text-xs text-slate-500 font-mono">
+    <p>© 2026 THE SECRET: IDEA — Founder & Creator: <span class="text-slate-300 font-bold">Charos Ismoilova</span> | Bukhara Presidential School</p>
+  </footer>
+
+  <script>
+    // INITIAL DATA SET STORED IN LOCALSTORAGE
+    const initialStudents = [
+      { id: '1', name: 'Amirbek Aliyev', grade: 'Grade 8', isVIP: true, points: 140, completedMissions: [1, 2] },
+      { id: '2', name: 'Malika Raximova', grade: 'Grade 9', isVIP: true, points: 125, completedMissions: [1] },
+      { id: '3', name: 'Jasur Karimov', grade: 'Grade 7', isVIP: false, points: 80, completedMissions: [] },
+      { id: '4', name: 'Laylo Umarova', grade: 'Grade 10', isVIP: false, points: 95, completedMissions: [] },
+      { id: '5', name: 'Sardor Sobirov', grade: 'Grade 11', isVIP: true, points: 150, completedMissions: [1, 2, 3] }
+    ];
+
+    const weeklyMissions = [
+      { id: 1, day: 'Mon', title: 'The Assembly & Oath', desc: 'Report to Room 204 discreetly. Receive secret badge and sign non-disclosure pledge.' },
+      { id: 2, day: 'Tue', title: 'Mystery Logic Challenge', desc: 'Solve the cipher escape puzzle within 20 minutes as a team.' },
+      { id: 3, day: 'Wed', title: 'Secret Service Mission', desc: 'Prepare anonymous appreciation letters for school maintenance staff.' },
+      { id: 4, day: 'Thu', title: 'Creative Innovation Sprint', desc: 'Design a 1-page school improvement concept map.' },
+      { id: 5, day: 'Fri', title: 'The Reveal & Award', desc: 'Final points tally and crowning of the Agent of the Week.' }
+    ];
+
+    let students = JSON.parse(localStorage.getItem('tsi_students')) || initialStudents;
+    let selectedStudentId = students[0].id;
+    let currentViewMode = 'admin'; // 'admin' or 'student'
+
+    function saveData() {
+      localStorage.setItem('tsi_students', JSON.stringify(students));
+    }
+
+    function init() {
+      renderStudentDropdown();
+      renderDashboard();
+    }
+
+    function getSelectedStudent() {
+      return students.find(s => s.id === selectedStudentId) || students[0];
+    }
+
+    function renderStudentDropdown() {
+      const select = document.getElementById('student-selector');
+      select.innerHTML = students.map(s => `
+        <option value="${s.id}" ${s.id === selectedStudentId
