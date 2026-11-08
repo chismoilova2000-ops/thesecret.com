@@ -97,8 +97,8 @@
         <div id="founder-only-actions" class="pt-3 border-t border-slate-800 space-y-3">
           <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mono">Add New Student (Founder)</h4>
           <div class="space-y-2">
-            <input type="text" id="new-student-name" placeholder="Full Student Name" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none">
-            <input type="text" id="new-student-grade" placeholder="Grade (e.g. Grade 9)" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none">
+            <input type="text" id="new-student-name" placeholder="Full Student Name" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none text-white">
+            <input type="text" id="new-student-grade" placeholder="Grade (e.g. Grade 8)" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none text-white">
             <button onclick="addNewStudent()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 rounded-lg transition">
               + Add Member to Database
             </button>
@@ -124,7 +124,7 @@
     <!-- RIGHT COLUMN: MAIN DASHBOARD & ROSTER (8 COLS) -->
     <div class="lg:col-span-8 space-y-6">
 
-      <!-- VIP HERO BANNER (AUTOMATICALLY REVEALED FOR CHOSEN VIP STUDENTS) -->
+      <!-- VIP HERO BANNER -->
       <div id="vip-hero-banner" class="hidden bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-500/40 rounded-2xl p-6 relative overflow-hidden shadow-2xl">
         <div class="relative z-10 space-y-3">
           <div class="flex items-center gap-2">
@@ -135,7 +135,7 @@
           </div>
           <h2 class="text-2xl font-black tracking-tight text-white" id="vip-hero-name">Agent Name</h2>
           <p class="text-xs text-slate-300 max-w-xl">
-            You have been selected by HQ for this week's clandestine cycle. Report to Headquarters during lunch breaks. Maintain complete discretion.
+            You have been selected for this week's clandestine cycle. Report to Headquarters during lunch breaks. Maintain complete discretion.
           </p>
           <div class="pt-2 flex flex-wrap gap-4 text-xs font-mono">
             <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
@@ -148,7 +148,7 @@
             </div>
             <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
               <span class="text-slate-400 block text-[10px]">SCORE</span>
-              <span class="text-amber-400 font-bold" id="vip-hero-points">100 PTS</span>
+              <span class="text-amber-400 font-bold" id="vip-hero-points">0 PTS</span>
             </div>
           </div>
         </div>
@@ -178,13 +178,13 @@
         </div>
       </div>
 
-      <!-- CLASSIFIED ROSTER TABLE WITH ROLE-BASED EDITING -->
+      <!-- CLASSIFIED ROSTER TABLE -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mono flex items-center gap-2">
             <i class="fa-solid fa-users text-amber-400"></i> Student & HQ Database
           </h3>
-          <span class="text-xs font-mono text-slate-400" id="total-students-count">0 Operatives Enrolled</span>
+          <span class="text-xs font-mono text-slate-400" id="total-students-count">0 Members Enrolled</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -196,7 +196,7 @@
                 <th class="p-3">System Role</th>
                 <th class="p-3">VIP Status</th>
                 <th class="p-3 text-right">Points</th>
-                <th class="p-3 text-center" id="th-actions">Actions</th>
+                <th class="p-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody id="roster-table-body" class="divide-y divide-slate-800/60">
@@ -215,13 +215,9 @@
   </footer>
 
   <script>
-    // INITIAL STUDENT DATABASE
+    // CLEAN INITIAL DATABASE: YOU AS GRADE 8 FOUNDER & NO RANDOM MOCK NAMES
     const defaultStudents = [
-      { id: '1', name: 'Charos Ismoilova', grade: 'Grade 10', role: 'founder', isVIP: true, points: 500, completedMissions: [1,2,3,4,5] },
-      { id: '2', name: 'Amirbek Aliyev', grade: 'Grade 8', role: 'hq', isVIP: true, points: 140, completedMissions: [1, 2] },
-      { id: '3', name: 'Malika Raximova', grade: 'Grade 9', role: 'student', isVIP: true, points: 125, completedMissions: [1] },
-      { id: '4', name: 'Jasur Karimov', grade: 'Grade 7', role: 'student', isVIP: false, points: 80, completedMissions: [] },
-      { id: '5', name: 'Laylo Umarova', grade: 'Grade 10', role: 'student', isVIP: false, points: 95, completedMissions: [] }
+      { id: '1', name: 'Charos Ismoilova', grade: 'Grade 8', role: 'founder', isVIP: true, points: 100, completedMissions: [] }
     ];
 
     const weeklyMissions = [
@@ -232,12 +228,12 @@
       { id: 5, day: 'Fri', title: 'The Reveal & Award', desc: 'Final points tally and crowning of the Agent of the Week.' }
     ];
 
-    let students = JSON.parse(localStorage.getItem('tsi_students_v2')) || defaultStudents;
+    let students = JSON.parse(localStorage.getItem('tsi_students_v3')) || defaultStudents;
     let selectedStudentId = students[0].id;
-    let currentRole = 'founder'; // 'founder', 'hq', or 'student'
+    let currentRole = 'founder';
 
     function saveData() {
-      localStorage.setItem('tsi_students_v2', JSON.stringify(students));
+      localStorage.setItem('tsi_students_v3', JSON.stringify(students));
     }
 
     function init() {
@@ -264,7 +260,6 @@
         ? 'px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950'
         : 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white';
 
-      // Toggle Panel Controls visibility
       const controlsCard = document.getElementById('controls-card');
       const founderActions = document.getElementById('founder-only-actions');
       const badge = document.getElementById('role-indicator-badge');
@@ -303,7 +298,6 @@
     function renderDashboard() {
       const student = getSelectedStudent();
       
-      // Account card update
       const accountCard = document.getElementById('account-status-card');
       if (student.isVIP) {
         accountCard.className = 'mt-4 p-4 rounded-xl border transition-all agent-card-bg gold-glow border-amber-500/50';
@@ -327,7 +321,6 @@
         `;
       }
 
-      // Automatically switch Hero Banner based on whether chosen student is VIP
       if (student.isVIP) {
         document.getElementById('vip-hero-banner').classList.remove('hidden');
         document.getElementById('standard-hero-banner').classList.add('hidden');
@@ -338,7 +331,6 @@
         document.getElementById('standard-hero-banner').classList.remove('hidden');
       }
 
-      // Render Dispatch Letter
       const letter = document.getElementById('letter-preview');
       letter.innerHTML = `
         <p class="text-amber-400 font-bold">TOP SECRET // FOR YOUR EYES ONLY</p>
@@ -348,7 +340,6 @@
         <p class="text-[10px] text-slate-500 italic">Signed: Charos Ismoilova (Founder & Director)</p>
       `;
 
-      // Render Missions
       const missionContainer = document.getElementById('missions-container');
       missionContainer.innerHTML = weeklyMissions.map(m => {
         const isDone = student.completedMissions.includes(m.id);
@@ -367,7 +358,6 @@
         `;
       }).join('');
 
-      // Render Roster
       document.getElementById('total-students-count').innerText = `${students.length} Members Enrolled`;
       const tbody = document.getElementById('roster-table-body');
       tbody.innerHTML = students.map(s => {
@@ -417,7 +407,6 @@
       }).join('');
     }
 
-    // ADMINISTRATIVE FUNCTIONS
     function toggleVIPStatus() {
       const student = getSelectedStudent();
       student.isVIP = !student.isVIP;
@@ -521,7 +510,6 @@
       alert('Classified letter copied to clipboard!');
     }
 
-    // Initialize on page load
     init();
   </script>
 </body>
