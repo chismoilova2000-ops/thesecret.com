@@ -3,203 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE SECRET: IDEA — Intelligence Terminal</title>
+  <title>THE SECRET: IDEA — Vampire Intelligence Terminal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;600;800&display=swap');
-    body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #e2e8f0; }
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;600&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #050305; color: #e2e8f0; }
+    .gothic-title { font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
     .mono { font-family: 'Fira Code', monospace; }
-    .gold-glow { box-shadow: 0 0 25px rgba(234, 179, 8, 0.25); border-color: rgba(234, 179, 8, 0.6); }
-    .agent-card-bg { background: linear-gradient(135deg, rgba(30,41,59,0.8) 0%, rgba(15,23,42,0.9) 100%); }
-    .vip-badge-gradient { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
+    .crimson-glow { box-shadow: 0 0 25px rgba(220, 38, 38, 0.4); border-color: rgba(220, 38, 38, 0.7); }
+    .vampire-card { background: linear-gradient(135deg, rgba(25, 4, 10, 0.95) 0%, rgba(8, 2, 4, 0.98) 100%); border: 1px solid rgba(220, 38, 38, 0.25); }
+    .vampire-active-card { background: linear-gradient(135deg, rgba(40, 6, 15, 0.95) 0%, rgba(15, 3, 6, 0.98) 100%); border: 1px solid rgba(220, 38, 38, 0.6); box-shadow: 0 0 30px rgba(153, 27, 27, 0.3); }
+    .vampire-badge { background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%); color: #fee2e2; border: 1px solid #ef4444; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+<body class="min-h-screen bg-[#050305] text-slate-100 flex flex-col">
 
   <!-- TOP HEADER -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-4 py-3">
+  <header class="border-b border-red-950/60 bg-[#080204]/90 backdrop-blur sticky top-0 z-50 px-4 py-3">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xl">
-          <i class="fa-solid fa-user-secret"></i>
+        <div class="w-10 h-10 rounded-lg bg-red-950/40 border border-red-800/50 flex items-center justify-center text-red-500 font-bold text-xl shadow-[0_0_15px_rgba(220,38,38,0.3)]">
+          <i class="fa-solid fa-moon"></i>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold tracking-wider text-slate-100 mono">THE SECRET: IDEA</h1>
-            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-xs px-2 py-0.5 rounded font-mono">thesecretidea.app</span>
+            <h1 class="text-lg font-extrabold tracking-wider text-red-100 gothic-title">THE SECRET: IDEA</h1>
+            <span class="bg-red-950/50 text-red-400 border border-red-900/50 text-xs px-2 py-0.5 rounded font-mono">vampire.terminal</span>
           </div>
-          <p class="text-xs text-slate-400">Founder & Director: <span class="text-amber-400 font-semibold">Charos Ismoilova</span></p>
+          <p class="text-xs text-slate-400">Founder & High Director: <span class="text-red-400 font-semibold">Charos Ismoilova</span></p>
         </div>
       </div>
 
-      <!-- 3-LEVEL PERSPECTIVE SWITCHER -->
-      <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-        <span class="text-slate-500 px-2 font-mono text-[10px]">ROLE:</span>
-        <button id="btn-founder" onclick="switchRole('founder')" class="px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950">
-          <i class="fa-solid fa-crown mr-1"></i> Founder
-        </button>
-        <button id="btn-hq" onclick="switchRole('hq')" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white">
-          <i class="fa-solid fa-user-gear mr-1"></i> HQ Team
-        </button>
-        <button id="btn-student" onclick="switchRole('student')" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white">
-          <i class="fa-solid fa-user-shield mr-1"></i> Student View
-        </button>
+      <!-- ROLE STATUS DISPLAY -->
+      <div id="role-display-badge" class="px-4 py-1.5 rounded-xl border border-red-900/50 bg-red-950/30 text-xs font-mono text-red-300 flex items-center gap-2">
+        <i class="fa-solid fa-crown text-amber-400"></i> <span id="current-role-text">FOUNDER ACCESS GRANTED</span>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT CONTAINER -->
+  <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- LEFT COLUMN: CONTROL & ACTIVE SESSION (4 COLS) -->
+    <!-- LEFT COLUMN: ACTIVE SESSION & CONTROLS (4 COLS) -->
     <div class="lg:col-span-4 space-y-6">
       
       <!-- ACTIVE STUDENT SELECTOR -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mono flex justify-between items-center">
-          <span>Active Session</span>
-          <i class="fa-solid fa-id-card text-amber-400"></i>
+      <div class="vampire-card rounded-2xl p-5 shadow-2xl">
+        <h2 class="text-xs font-bold text-red-400 uppercase tracking-widest mb-3 gothic-title flex justify-between items-center">
+          <span>Bloodline Session</span>
+          <i class="fa-solid fa-fingerprint text-red-500"></i>
         </h2>
         
-        <label class="block text-xs text-slate-400 mb-1">Select Student Profile:</label>
-        <select id="student-selector" onchange="onStudentSelect(this.value)" class="w-full bg-slate-950 border border-slate-800 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-amber-500 outline-none">
+        <label class="block text-xs text-slate-400 mb-1">Select Operative Profile:</label>
+        <select id="student-selector" onchange="onStudentSelect(this.value)" class="w-full bg-[#0a0306] border border-red-900/50 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-red-600 outline-none">
         </select>
 
-        <div id="account-status-card" class="mt-4 p-4 rounded-xl border transition-all agent-card-bg border-slate-800">
+        <div id="account-status-card" class="mt-4 p-4 rounded-xl border transition-all vampire-card border-red-900/40">
         </div>
       </div>
 
-      <!-- CONTROLS CARD (ADMIN & HQ ONLY) -->
-      <div id="controls-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest mono flex items-center gap-2">
-            <i class="fa-solid fa-sliders"></i> Control Panel
+      <!-- CONTROL PANEL (VISIBLE TO FOUNDER & HQ) -->
+      <div id="controls-card" class="vampire-card rounded-2xl p-5 shadow-2xl space-y-4">
+        <div class="flex justify-between items-center border-b border-red-950 pb-2">
+          <h3 class="text-xs font-bold text-red-400 uppercase tracking-widest gothic-title flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Founder Controls
           </h3>
-          <span id="role-indicator-badge" class="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-0.5 rounded font-mono">FOUNDER MODE</span>
+          <span id="panel-role-badge" class="text-[10px] bg-red-950 text-red-300 border border-red-800 px-2 py-0.5 rounded font-mono">FOUNDER</span>
         </div>
         
-        <!-- VIP TOGGLE & POINTS -->
         <div class="space-y-3">
-          <button onclick="toggleVIPStatus()" id="toggle-vip-btn" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold transition border border-amber-500/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30">
-            ⭐ Toggle Selected Student VIP Status
+          <button onclick="toggleVIPStatus()" id="toggle-vip-btn" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold transition border border-red-700/60 bg-red-950/40 text-red-200 hover:bg-red-900/50">
+            🦇 Toggle Bloodline (VIP Status)
           </button>
 
           <div class="flex gap-2">
-            <input type="number" id="point-add-input" value="10" class="w-20 bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-center font-mono">
-            <button onclick="addPoints()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 rounded-xl transition border border-slate-700">
-              + Award Merit Points
+            <input type="number" id="point-add-input" value="15" class="w-20 bg-[#0a0306] border border-red-900/50 rounded-xl p-2 text-xs text-center font-mono text-slate-200">
+            <button onclick="addPoints()" class="flex-1 bg-red-950/80 hover:bg-red-900 text-red-200 text-xs font-bold py-2 rounded-xl transition border border-red-800/60">
+              + Grant Blood Points
             </button>
           </div>
         </div>
 
-        <!-- FOUNDER-ONLY MEMBER MANAGEMENT -->
-        <div id="founder-only-actions" class="pt-3 border-t border-slate-800 space-y-3">
-          <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mono">Add New Student (Founder)</h4>
+        <!-- FOUNDER MEMBER MANAGEMENT -->
+        <div id="founder-only-actions" class="pt-3 border-t border-red-950 space-y-3">
+          <h4 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider gothic-title">Enlist New Operative</h4>
           <div class="space-y-2">
-            <input type="text" id="new-student-name" placeholder="Full Student Name" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none text-white">
-            <input type="text" id="new-student-grade" placeholder="Grade (e.g. Grade 8)" class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2 outline-none text-white">
-            <button onclick="addNewStudent()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 rounded-lg transition">
-              + Add Member to Database
+            <input type="text" id="new-student-name" placeholder="Full Name" class="w-full bg-[#0a0306] border border-red-900/50 text-xs rounded-lg p-2 outline-none text-white">
+            <input type="text" id="new-student-grade" placeholder="Grade (e.g. Grade 8)" class="w-full bg-[#0a0306] border border-red-900/50 text-xs rounded-lg p-2 outline-none text-white">
+            <select id="new-student-role" class="w-full bg-[#0a0306] border border-red-900/50 text-xs rounded-lg p-2 outline-none text-slate-300">
+              <option value="student">Standard Student</option>
+              <option value="hq">HQ Member</option>
+            </select>
+            <button onclick="addNewStudent()" class="w-full bg-red-800 hover:bg-red-700 text-white text-xs font-bold py-2 rounded-lg transition shadow-lg">
+              + Summon to Covenant
             </button>
           </div>
         </div>
       </div>
 
-      <!-- DISPATCH ENVELOPE PREVIEW -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 mono flex items-center justify-between">
-          <span>Dispatch Letter</span>
-          <i class="fa-solid fa-envelope-open-text text-amber-400"></i>
+      <!-- DISPATCH ENVELOPE (VISIBLE ONLY TO CHOSEN VIP OPERATIVES) -->
+      <div id="dispatch-container" class="vampire-card rounded-2xl p-5 shadow-2xl hidden">
+        <h3 class="text-xs font-bold text-red-400 uppercase tracking-widest mb-3 gothic-title flex items-center justify-between">
+          <span>Nocturnal Dispatch</span>
+          <i class="fa-solid fa-envelope-open-text text-red-500"></i>
         </h3>
-        <div id="letter-preview" class="p-4 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-300 space-y-2 leading-relaxed">
+        <div id="letter-preview" class="p-4 bg-[#0a0306] border border-red-900/50 rounded-xl text-xs font-mono text-red-200 space-y-2 leading-relaxed">
         </div>
-        <button onclick="copyLetter()" class="mt-3 w-full py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-300 transition">
-          <i class="fa-regular fa-copy mr-1"></i> Copy Confidential Letter
+        <button onclick="copyLetter()" class="mt-3 w-full py-2 bg-red-950 hover:bg-red-900 text-xs font-bold rounded-lg border border-red-800 text-red-200 transition">
+          <i class="fa-regular fa-copy mr-1"></i> Copy Sealed Dispatch
         </button>
+      </div>
+
+      <!-- LOCKED NOTICE FOR NON-VIP -->
+      <div id="locked-dispatch-container" class="vampire-card rounded-2xl p-5 shadow-2xl text-center space-y-2">
+        <i class="fa-solid fa-lock text-red-900 text-2xl"></i>
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest gothic-title">Dispatch Sealed</h3>
+        <p class="text-[11px] text-slate-500">No nocturnal dispatch issued for this observer. Awaiting the bite of selection from the Founder...</p>
       </div>
 
     </div>
 
-    <!-- RIGHT COLUMN: MAIN DASHBOARD & ROSTER (8 COLS) -->
+    <!-- RIGHT COLUMN: DASHBOARD & MISSIONS (8 COLS) -->
     <div class="lg:col-span-8 space-y-6">
 
-      <!-- VIP HERO BANNER -->
-      <div id="vip-hero-banner" class="hidden bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-500/40 rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+      <!-- VIP HERO BANNER (REVEALED WHEN CHOSEN) -->
+      <div id="vip-hero-banner" class="hidden vampire-active-card rounded-2xl p-6 relative overflow-hidden shadow-2xl">
         <div class="relative z-10 space-y-3">
           <div class="flex items-center gap-2">
-            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold vip-badge-gradient text-slate-950 uppercase tracking-wider">
-              ⭐ VIP Operative Active
+            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold vampire-badge uppercase tracking-wider gothic-title">
+              🦇 Chosen Covenant Member
             </span>
-            <span class="text-xs text-amber-400 font-mono">Week 1 Cohort</span>
+            <span class="text-xs text-red-400 font-mono">Nocturnal Cycle 1</span>
           </div>
-          <h2 class="text-2xl font-black tracking-tight text-white" id="vip-hero-name">Agent Name</h2>
+          <h2 class="text-2xl font-black tracking-tight text-white gothic-title" id="vip-hero-name">Agent Name</h2>
           <p class="text-xs text-slate-300 max-w-xl">
-            You have been selected for this week's clandestine cycle. Report to Headquarters during lunch breaks. Maintain complete discretion.
+            You have been summoned to the inner circle. Gather in the shadows of Room 204 during the midday toll. Silence is your shield.
           </p>
           <div class="pt-2 flex flex-wrap gap-4 text-xs font-mono">
-            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
-              <span class="text-slate-400 block text-[10px]">NEXT MEETING</span>
-              <span class="text-amber-400 font-bold">Monday @ 13:15</span>
+            <div class="bg-[#0a0306]/90 px-3 py-2 rounded-lg border border-red-900/50">
+              <span class="text-slate-400 block text-[10px]">ASSEMBLY TIME</span>
+              <span class="text-red-400 font-bold">Monday @ 13:15</span>
             </div>
-            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
-              <span class="text-slate-400 block text-[10px]">HQ LOCATION</span>
-              <span class="text-amber-400 font-bold">Room 204 (Project Lab)</span>
+            <div class="bg-[#0a0306]/90 px-3 py-2 rounded-lg border border-red-900/50">
+              <span class="text-slate-400 block text-[10px]">SANCTUM</span>
+              <span class="text-red-400 font-bold">Room 204 (The Vault)</span>
             </div>
-            <div class="bg-slate-950/80 px-3 py-2 rounded-lg border border-slate-800">
-              <span class="text-slate-400 block text-[10px]">SCORE</span>
-              <span class="text-amber-400 font-bold" id="vip-hero-points">0 PTS</span>
+            <div class="bg-[#0a0306]/90 px-3 py-2 rounded-lg border border-red-900/50">
+              <span class="text-slate-400 block text-[10px]">BLOOD POINTS</span>
+              <span class="text-red-400 font-bold" id="vip-hero-points">0 PTS</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- STANDARD LOCKED SCREEN FOR UNCHOSEN STUDENTS -->
-      <div id="standard-hero-banner" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center space-y-4">
-        <div class="w-14 h-14 bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-500 text-xl">
-          <i class="fa-solid fa-lock"></i>
+      <!-- STANDARD OBSERVER SCREEN -->
+      <div id="standard-hero-banner" class="vampire-card rounded-2xl p-8 text-center space-y-4">
+        <div class="w-16 h-16 bg-red-950/40 border border-red-900/50 rounded-full flex items-center justify-center mx-auto text-red-500 text-2xl shadow-[0_0_20px_rgba(220,38,38,0.2)]">
+          <i class="fa-solid fa-eye-slash"></i>
         </div>
-        <h2 class="text-xl font-bold text-slate-200">Standard Access Terminal</h2>
+        <h2 class="text-xl font-bold text-slate-200 gothic-title">Shadow Observer Terminal</h2>
         <p class="text-xs text-slate-400 max-w-md mx-auto">
-          You are currently in observer mode. When you are chosen by HQ or the Founder, your terminal will automatically unlock your classified status.
+          You watch from the twilight. Only those touched by the Founder's selection code will pierce the veil and enter active covenant missions.
         </p>
       </div>
 
-      <!-- WEEKLY MISSIONS -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mono flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-amber-400"></i> Weekly Mission Agenda
+      <!-- VAMPIRE-THEMED MISSIONS (WRITTEN BY FOUNDER) -->
+      <div class="vampire-card rounded-2xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-red-950 pb-3">
+          <h3 class="text-sm font-bold text-red-200 uppercase tracking-wider gothic-title flex items-center gap-2">
+            <i class="fa-solid fa-skull text-red-500"></i> Weekly Covenant Decrees (Founder's Codex)
           </h3>
-          <span class="text-xs font-mono text-slate-400">Cycle Active</span>
+          <span class="text-xs font-mono text-red-400">Darkness Active</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="missions-container">
         </div>
       </div>
 
-      <!-- CLASSIFIED ROSTER TABLE -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mono flex items-center gap-2">
-            <i class="fa-solid fa-users text-amber-400"></i> Student & HQ Database
+      <!-- STUDENT DATABASE & ROLE MANAGEMENT -->
+      <div class="vampire-card rounded-2xl p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-red-950 pb-3">
+          <h3 class="text-sm font-bold text-red-200 uppercase tracking-wider gothic-title flex items-center gap-2">
+            <i class="fa-solid fa-book-skull text-red-500"></i> Covenant Bloodline Ledger
           </h3>
-          <span class="text-xs font-mono text-slate-400" id="total-students-count">0 Members Enrolled</span>
+          <span class="text-xs font-mono text-slate-400" id="total-students-count">0 Souls Enrolled</span>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-300">
-            <thead class="bg-slate-950 text-slate-400 uppercase font-mono text-[10px]">
+            <thead class="bg-[#080204] text-red-400 uppercase font-mono text-[10px] border-b border-red-950">
               <tr>
-                <th class="p-3">Student Name</th>
+                <th class="p-3">Operative Name</th>
                 <th class="p-3">Grade</th>
-                <th class="p-3">System Role</th>
-                <th class="p-3">VIP Status</th>
+                <th class="p-3">Rank</th>
+                <th class="p-3">Bloodline Status</th>
                 <th class="p-3 text-right">Points</th>
                 <th class="p-3 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody id="roster-table-body" class="divide-y divide-slate-800/60">
+            <tbody id="roster-table-body" class="divide-y divide-red-950/40">
             </tbody>
           </table>
         </div>
@@ -210,30 +213,30 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-slate-800 bg-slate-950 py-4 px-6 text-center text-xs text-slate-500 font-mono">
-    <p>© 2026 THE SECRET: IDEA — Founder & Director: <span class="text-slate-300 font-bold">Charos Ismoilova</span> | Bukhara Presidential School</p>
+  <footer class="border-t border-red-950/60 bg-[#080204] py-4 px-6 text-center text-xs text-slate-500 font-mono">
+    <p>© 2026 THE SECRET: IDEA — Founder & High Director: <span class="text-red-300 font-bold">Charos Ismoilova</span> (Grade 8) | Bukhara Presidential School</p>
   </footer>
 
   <script>
-    // CLEAN INITIAL DATABASE: YOU AS GRADE 8 FOUNDER & NO RANDOM MOCK NAMES
+    // INITIAL DATABASE WITH YOU AS GRADE 8 FOUNDER
     const defaultStudents = [
-      { id: '1', name: 'Charos Ismoilova', grade: 'Grade 8', role: 'founder', isVIP: true, points: 100, completedMissions: [] }
+      { id: '1', name: 'Charos Ismoilova', grade: 'Grade 8', role: 'founder', isVIP: true, points: 200, completedMissions: [] }
     ];
 
-    const weeklyMissions = [
-      { id: 1, day: 'Mon', title: 'The Assembly & Oath', desc: 'Report to Room 204 discreetly. Receive secret badge and sign non-disclosure pledge.' },
-      { id: 2, day: 'Tue', title: 'Mystery Logic Challenge', desc: 'Solve the cipher escape puzzle within 20 minutes as a team.' },
-      { id: 3, day: 'Wed', title: 'Secret Service Mission', desc: 'Prepare anonymous appreciation letters for school maintenance staff.' },
-      { id: 4, day: 'Thu', title: 'Creative Innovation Sprint', desc: 'Design a 1-page school improvement concept map.' },
-      { id: 5, day: 'Fri', title: 'The Reveal & Award', desc: 'Final points tally and crowning of the Agent of the Week.' }
+    // FOUNDER-WRITTEN VAMPIRE MISSIONS
+    const gothicMissions = [
+      { id: 1, day: 'Mon', title: 'The Nocturnal Gathering', desc: 'Assemble in Room 204 after dusk. Sign the bloodline pact and receive your obsidian sigil.' },
+      { id: 2, day: 'Tue', title: 'Sanguine Cipher', desc: 'Decrypt the ancient manuscript hidden within the school archives before the moon peaks.' },
+      { id: 3, day: 'Wed', title: 'Shadow Whispers', desc: 'Deliver anonymous tokens of gratitude across the silent corridors without being perceived.' },
+      { id: 4, day: 'Thu', title: 'The Midnight Covenant', desc: 'Forge an alliance and draft a master blueprint for total campus illumination from the shadows.' },
+      { id: 5, day: 'Fri', title: 'The Bloodline Crown', desc: 'Final tally of shadows. Crowning the Arch-Agent of the week in secret ceremony.' }
     ];
 
-    let students = JSON.parse(localStorage.getItem('tsi_students_v3')) || defaultStudents;
+    let students = JSON.parse(localStorage.getItem('tsi_vampire_db_v4')) || defaultStudents;
     let selectedStudentId = students[0].id;
-    let currentRole = 'founder';
 
     function saveData() {
-      localStorage.setItem('tsi_students_v3', JSON.stringify(students));
+      localStorage.setItem('tsi_vampire_db_v4', JSON.stringify(students));
     }
 
     function init() {
@@ -245,39 +248,8 @@
       return students.find(s => s.id === selectedStudentId) || students[0];
     }
 
-    function switchRole(role) {
-      currentRole = role;
-      
-      document.getElementById('btn-founder').className = role === 'founder' 
-        ? 'px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950'
-        : 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white';
-      
-      document.getElementById('btn-hq').className = role === 'hq' 
-        ? 'px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950'
-        : 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white';
-
-      document.getElementById('btn-student').className = role === 'student' 
-        ? 'px-3 py-1.5 rounded-lg font-semibold transition bg-amber-500 text-slate-950'
-        : 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white';
-
-      const controlsCard = document.getElementById('controls-card');
-      const founderActions = document.getElementById('founder-only-actions');
-      const badge = document.getElementById('role-indicator-badge');
-
-      if (role === 'founder') {
-        controlsCard.style.display = 'block';
-        founderActions.style.display = 'block';
-        badge.innerText = 'FOUNDER MODE';
-        badge.className = 'text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/40 px-2 py-0.5 rounded font-mono';
-      } else if (role === 'hq') {
-        controlsCard.style.display = 'block';
-        founderActions.style.display = 'none';
-        badge.innerText = 'HQ MODE';
-        badge.className = 'text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/40 px-2 py-0.5 rounded font-mono';
-      } else {
-        controlsCard.style.display = 'none';
-      }
-
+    function onStudentSelect(id) {
+      selectedStudentId = id;
       renderDashboard();
     }
 
@@ -285,232 +257,37 @@
       const select = document.getElementById('student-selector');
       select.innerHTML = students.map(s => `
         <option value="${s.id}" ${s.id === selectedStudentId ? 'selected' : ''}>
-          ${s.name} (${s.grade}) ${s.isVIP ? '⭐ [VIP]' : ''}
+          ${s.name} (${s.grade}) — [${s.role.toUpperCase()}] ${s.isVIP ? '🦇 [VIP]' : ''}
         </option>
       `).join('');
     }
 
-    function onStudentSelect(id) {
-      selectedStudentId = id;
-      renderDashboard();
-    }
-
     function renderDashboard() {
       const student = getSelectedStudent();
-      
-      const accountCard = document.getElementById('account-status-card');
-      if (student.isVIP) {
-        accountCard.className = 'mt-4 p-4 rounded-xl border transition-all agent-card-bg gold-glow border-amber-500/50';
-        accountCard.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-amber-400 uppercase font-mono">⭐ VIP Operative</span>
-            <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-mono">ACTIVE</span>
-          </div>
-          <h4 class="text-base font-extrabold text-white mt-1">${student.name}</h4>
-          <p class="text-xs text-slate-400">${student.grade} • Score: <span class="text-amber-400 font-mono font-bold">${student.points} pts</span></p>
-        `;
+      const isUserFounder = student.role === 'founder';
+      const isUserHQ = student.role === 'hq';
+
+      // Update role indicator badge at top
+      const topBadge = document.getElementById('current-role-text');
+      if (isUserFounder) {
+        topBadge.innerText = 'FOUNDER ACCESS (CHAROS ISMOILOVA)';
+      } else if (isUserHQ) {
+        topBadge.innerText = 'HQ COVENANT MEMBER';
       } else {
-        accountCard.className = 'mt-4 p-4 rounded-xl border transition-all agent-card-bg border-slate-800';
-        accountCard.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400 uppercase font-mono">Standard Student</span>
-            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono">OBSERVER</span>
-          </div>
-          <h4 class="text-base font-bold text-slate-300 mt-1">${student.name}</h4>
-          <p class="text-xs text-slate-400">${student.grade} • Score: <span class="text-slate-300 font-mono">${student.points} pts</span></p>
-        `;
+        topBadge.innerText = 'OBSERVER TERMINAL';
       }
 
-      if (student.isVIP) {
-        document.getElementById('vip-hero-banner').classList.remove('hidden');
-        document.getElementById('standard-hero-banner').classList.add('hidden');
-        document.getElementById('vip-hero-name').innerText = student.name + ' (' + student.grade + ')';
-        document.getElementById('vip-hero-points').innerText = student.points + ' PTS';
+      // Control panel visibility: only founder or hq can view controls, but user can only edit roles if founder
+      const controlsCard = document.getElementById('controls-card');
+      const founderActions = document.getElementById('founder-only-actions');
+      const panelBadge = document.getElementById('panel-role-badge');
+
+      if (isUserFounder) {
+        controlsCard.style.display = 'block';
+        founderActions.style.display = 'block';
+        panelBadge.innerText = 'FOUNDER';
+      } else if (isUserHQ) {
+        controlsCard.style.display = 'block';
+        founderActions.style.display = 'none'; // HQ cannot add/delete members
+        panelBadge.innerText = 'HQ MEMBER';
       } else {
-        document.getElementById('vip-hero-banner').classList.add('hidden');
-        document.getElementById('standard-hero-banner').classList.remove('hidden');
-      }
-
-      const letter = document.getElementById('letter-preview');
-      letter.innerHTML = `
-        <p class="text-amber-400 font-bold">TOP SECRET // FOR YOUR EYES ONLY</p>
-        <p><strong>To:</strong> Agent ${student.name} (${student.grade})</p>
-        <p>You have been chosen for <strong>THE SECRET: IDEA</strong> mission cycle.</p>
-        <p class="text-slate-400"><strong>First Briefing:</strong> Monday @ 13:15 in Room 204.</p>
-        <p class="text-[10px] text-slate-500 italic">Signed: Charos Ismoilova (Founder & Director)</p>
-      `;
-
-      const missionContainer = document.getElementById('missions-container');
-      missionContainer.innerHTML = weeklyMissions.map(m => {
-        const isDone = student.completedMissions.includes(m.id);
-        const canCheck = currentRole !== 'student';
-        return `
-          <div class="p-3 rounded-xl border ${isDone ? 'bg-amber-950/20 border-amber-500/40' : 'bg-slate-950 border-slate-800'} flex items-start gap-3">
-            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleMission(${m.id})" ${!canCheck ? 'disabled' : ''} class="mt-1 w-4 h-4 accent-amber-500 rounded cursor-pointer">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-amber-400 font-bold">${m.day}</span>
-                <h4 class="text-xs font-bold ${isDone ? 'text-amber-300 line-through' : 'text-slate-200'}">${m.title}</h4>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-1">${m.desc}</p>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('total-students-count').innerText = `${students.length} Members Enrolled`;
-      const tbody = document.getElementById('roster-table-body');
-      tbody.innerHTML = students.map(s => {
-        const isFounder = s.role === 'founder';
-        const isHQ = s.role === 'hq';
-
-        return `
-          <tr class="hover:bg-slate-800/40 transition ${s.id === selectedStudentId ? 'bg-slate-800/60' : ''}">
-            <td class="p-3 font-semibold text-slate-200">
-              ${currentRole === 'founder' || (currentRole === 'hq' && !isFounder)
-                ? `<input type="text" value="${s.name}" onchange="updateStudentName('${s.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-white">`
-                : s.name}
-            </td>
-            <td class="p-3 text-slate-400">
-              ${currentRole === 'founder' || (currentRole === 'hq' && !isFounder)
-                ? `<input type="text" value="${s.grade}" onchange="updateStudentGrade('${s.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-300 w-20">`
-                : s.grade}
-            </td>
-            <td class="p-3 font-mono text-[10px]">
-              ${isFounder 
-                ? '<span class="text-amber-400 font-bold">FOUNDER</span>' 
-                : isHQ 
-                  ? '<span class="text-blue-400 font-bold">HQ MEMBER</span>' 
-                  : '<span class="text-slate-500">STUDENT</span>'}
-            </td>
-            <td class="p-3">
-              ${s.isVIP 
-                ? '<span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-mono font-bold">VIP ACTIVE</span>' 
-                : '<span class="bg-slate-800 text-slate-400 text-[10px] px-2 py-0.5 rounded-full font-mono">OBSERVER</span>'}
-            </td>
-            <td class="p-3 text-right font-mono font-bold text-amber-400">${s.points}</td>
-            <td class="p-3 text-center space-x-1">
-              <button onclick="onStudentSelect('${s.id}')" class="text-[11px] text-slate-400 hover:text-amber-400 underline mr-1">
-                Select
-              </button>
-              ${currentRole === 'founder' && !isFounder ? `
-                <button onclick="toggleHQRole('${s.id}')" class="text-[10px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-blue-300">
-                  ${isHQ ? 'Demote' : 'Make HQ'}
-                </button>
-                <button onclick="deleteStudent('${s.id}')" class="text-[10px] bg-rose-950 hover:bg-rose-900 border border-rose-800/50 px-2 py-0.5 rounded text-rose-300">
-                  Delete
-                </button>
-              ` : ''}
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function toggleVIPStatus() {
-      const student = getSelectedStudent();
-      student.isVIP = !student.isVIP;
-      saveData();
-      renderStudentDropdown();
-      renderDashboard();
-    }
-
-    function addPoints() {
-      const val = parseInt(document.getElementById('point-add-input').value) || 0;
-      const student = getSelectedStudent();
-      student.points += val;
-      saveData();
-      renderDashboard();
-    }
-
-    function toggleMission(missionId) {
-      const student = getSelectedStudent();
-      if (student.completedMissions.includes(missionId)) {
-        student.completedMissions = student.completedMissions.filter(id => id !== missionId);
-      } else {
-        student.completedMissions.push(missionId);
-        student.points += 15;
-      }
-      saveData();
-      renderDashboard();
-    }
-
-    function updateStudentName(id, val) {
-      const s = students.find(x => x.id === id);
-      if (s && val.trim() !== '') {
-        s.name = val.trim();
-        saveData();
-        renderStudentDropdown();
-        renderDashboard();
-      }
-    }
-
-    function updateStudentGrade(id, val) {
-      const s = students.find(x => x.id === id);
-      if (s && val.trim() !== '') {
-        s.grade = val.trim();
-        saveData();
-        renderStudentDropdown();
-        renderDashboard();
-      }
-    }
-
-    function toggleHQRole(id) {
-      if (currentRole !== 'founder') return;
-      const s = students.find(x => x.id === id);
-      if (s && s.role !== 'founder') {
-        s.role = s.role === 'hq' ? 'student' : 'hq';
-        saveData();
-        renderDashboard();
-      }
-    }
-
-    function deleteStudent(id) {
-      if (currentRole !== 'founder') return;
-      if (confirm('Are you sure you want to remove this member?')) {
-        students = students.filter(s => s.id !== id);
-        selectedStudentId = students[0].id;
-        saveData();
-        renderStudentDropdown();
-        renderDashboard();
-      }
-    }
-
-    function addNewStudent() {
-      if (currentRole !== 'founder') return;
-      const nameInput = document.getElementById('new-student-name');
-      const gradeInput = document.getElementById('new-student-grade');
-      
-      const name = nameInput.value.trim();
-      const grade = gradeInput.value.trim();
-
-      if (name && grade) {
-        const newObj = {
-          id: Date.now().toString(),
-          name: name,
-          grade: grade,
-          role: 'student',
-          isVIP: false,
-          points: 50,
-          completedMissions: []
-        };
-        students.push(newObj);
-        nameInput.value = '';
-        gradeInput.value = '';
-        saveData();
-        renderStudentDropdown();
-        renderDashboard();
-      }
-    }
-
-    function copyLetter() {
-      const student = getSelectedStudent();
-      const text = `TOP SECRET // FOR YOUR EYES ONLY\nTo: Agent ${student.name} (${student.grade})\n\nYou have been chosen for THE SECRET: IDEA mission cycle.\nFirst Briefing: Monday @ 13:15 in Room 204.\n\nSigned: Charos Ismoilova (Founder & Director)`;
-      navigator.clipboard.writeText(text);
-      alert('Classified letter copied to clipboard!');
-    }
-
-    init();
-  </script>
-</body>
-</html>
